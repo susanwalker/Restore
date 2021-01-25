@@ -19,7 +19,7 @@ private
 
 def upload(local_source, remote_destination)
   Net::SFTP.start(CONFIG.host, CONFIG.username, password: CONFIG.password) do |sftp|
-    # remove the folder if it already exists 
+    # remove the folder if it already exists
     sftp.session.exec!("rm -rf #{remote_destination}")
 
     sftp.upload!(local_source, remote_destination, mkdir: true)
@@ -34,4 +34,14 @@ def download(remote_source, local_destination)
       sftp.download(remote_source, local_destination)
     end
   end
+end
+
+command = ARGV[0]
+
+if command == "backup"
+  backup
+elsif command == "restore"
+  restore
+else
+  puts "Bad command #{command}. Expected backup or restore"
 end
